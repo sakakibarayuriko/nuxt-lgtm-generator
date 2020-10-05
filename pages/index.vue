@@ -1,7 +1,10 @@
 <template>
   <div id="app" class="container">
     <div>
-      <h1>LGTM Generator</h1>
+      <div class="title">
+        <h1 class="lgtm">LGTM</h1>
+        <h1>Generator</h1>
+      </div>
       <div>
         <input id="file" type="file" accept="image/*" @change="onFileChange" />
       </div>
@@ -39,16 +42,15 @@ export default {
       const canvas = document.getElementById('canvas')
       const canvasWidth = 400
       const canvasHeight = 400
-      canvas.width = canvasWidth
-      canvas.height = canvasHeight
       const ctx = canvas.getContext('2d')
       // canvas内の要素をクリア
       ctx.clearRect(0, 0, canvasWidth, canvasHeight)
-
       // canvas上に画像を表示
       const img = new Image()
       img.src = this.uploadedImage
       img.onload = function () {
+        canvas.width = canvasWidth
+        canvas.height = img.height * (canvasWidth / img.width)
         ctx.drawImage(
           img,
           0,
@@ -58,11 +60,15 @@ export default {
         )
 
         // canvas上にテキストを表示
-        ctx.font = "bold 30px 'MS Pゴシック'"
+        ctx.font = "900 60px 'MS Pゴシック'"
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillStyle = '#FFFFFF'
-        ctx.fillText('L G T M', canvasWidth / 2, canvasHeight / 2)
+        ctx.fillText(
+          'LGTM',
+          canvasWidth / 2,
+          (img.height * (canvasWidth / img.width)) / 2
+        )
 
         // canvasを画像に変換
         const data = canvas.toDataURL()
@@ -75,8 +81,9 @@ export default {
         }
         const dlLink = document.createElement('a')
         dlLink.href = data
-        dlLink.download = 'sample.png'
+        dlLink.download = 'LGTM.png'
         dlLink.textContent = 'ダウンロード'
+        dlLink.className = 'download'
         parent.appendChild(dlLink)
       }
     },
@@ -86,9 +93,10 @@ export default {
 
 <style>
 h1 {
-  margin: 30px;
   color: #35495e;
-  font-size: 30px;
+  font-size: 40px;
+  font-weight: normal;
+  display: inline;
 }
 
 .container {
@@ -96,19 +104,28 @@ h1 {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   text-align: center;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+#canvas {
+  margin: 20px;
 }
 
-.links {
-  padding-top: 15px;
+.download {
+  background-color: #526488;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.lgtm {
+  font-weight: 800;
+}
+
+.title {
+  margin-top: 30px;
+  margin-bottom: 40px;
 }
 </style>
