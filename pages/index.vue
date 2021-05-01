@@ -44,54 +44,53 @@ export default {
       reader.readAsDataURL(file)
     },
     // canvas上に画像を生成
-    canvasDraw(imgSrc) {
-      const canvas = document.getElementById('canvas')
+    canvasDraw() {
       const canvasWidth = 400
       const canvasHeight = 400
-      const ctx = canvas.getContext('2d')
       // canvas内の要素をクリア
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+      this.context.clearRect(0, 0, canvasWidth, canvasHeight)
       // canvas上に画像を表示
       const img = new Image()
       img.src = this.uploadedImage
-      img.onload = function () {
-        canvas.width = canvasWidth
-        canvas.height = img.height * (canvasWidth / img.width)
-        ctx.drawImage(
+      img.onload = () => {
+        this.canvas.width = canvasWidth
+        this.canvas.height = img.height * (canvasWidth / img.width)
+        this.context.drawImage(
           img,
           0,
           0,
           canvasWidth,
           img.height * (canvasWidth / img.width)
         )
-
-        // canvas上にテキストを表示
-        ctx.font = "900 60px 'MS Pゴシック'"
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
-        ctx.fillStyle = '#FFFFFF'
-        ctx.fillText(
-          'LGTM',
-          canvasWidth / 2,
-          (img.height * (canvasWidth / img.width)) / 2
-        )
-
-        // canvasを画像に変換
-        const data = canvas.toDataURL()
-
-        // ダウンロードリンクを生成して出力
-        const parent = document.getElementById('result')
-        // result内の要素をクリア
-        if (parent.firstChild) {
-          parent.removeChild(parent.firstChild)
-        }
-        const dlLink = document.createElement('a')
-        dlLink.href = data
-        dlLink.download = 'LGTM.png'
-        dlLink.textContent = 'ダウンロード'
-        dlLink.className = 'download'
-        parent.appendChild(dlLink)
+        this.addText(canvasWidth, img)
+        this.createLink()
       }
+    },
+    // 画像上にテキストを表示
+    addText(canvasWidth, img) {
+      this.context.font = "900 60px 'MS Pゴシック'"
+      this.context.textAlign = 'center'
+      this.context.textBaseline = 'middle'
+      this.context.fillStyle = '#FFFFFF'
+      this.context.fillText(
+        'LGTM',
+        canvasWidth / 2,
+        (img.height * (canvasWidth / img.width)) / 2
+      )
+    },
+    // ダウンロードリンクを生成して出力
+    createLink() {
+      const parent = document.getElementById('result')
+      // result内の要素をクリア
+      if (parent.firstChild) {
+        parent.removeChild(parent.firstChild)
+      }
+      const dlLink = document.createElement('a')
+      dlLink.href = this.canvas.toDataURL()
+      dlLink.download = 'LGTM.png'
+      dlLink.textContent = 'ダウンロード'
+      dlLink.className = 'download'
+      parent.appendChild(dlLink)
     },
   },
 }
