@@ -19,8 +19,14 @@ export default {
   name: 'App',
   data() {
     return {
+      canvas: null,
+      context: null,
       uploadedImage: '',
     }
+  },
+  mounted() {
+    this.canvas = document.getElementById('canvas')
+    this.context = this.canvas.getContext('2d')
   },
   methods: {
     onFileChange(e) {
