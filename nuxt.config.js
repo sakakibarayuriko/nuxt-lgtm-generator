@@ -37,6 +37,6 @@ export default {
   target: 'static',
 
   router: {
-    base: '/imaginary-band/'
+    base: '/nuxt-lgtm-generator/'
   }
 }
